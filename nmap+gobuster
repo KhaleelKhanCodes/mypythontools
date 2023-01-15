@@ -1,0 +1,13 @@
+import subprocess
+
+# Define the target web application and local server
+target_host = "http://localhost"
+
+# Use Nmap to gather information about open ports on the target
+nmap_output = subprocess.run(["nmap", "-p-", target_host], capture_output=True)
+open_ports = [int(port.split("/")[0]) for port in nmap_output.stdout.decode().split("\n") if "open" in port]
+
+# Use GoBuster to gather information about the web application
+for port in open_ports:
+    gobuster_output = subprocess.run(["gobuster", "-u", f"{target_host}:{port}", "-w", "wordlist.txt", "-t", "50"], capture_output=True)
+    print(gobuster_output.stdout.decode())
