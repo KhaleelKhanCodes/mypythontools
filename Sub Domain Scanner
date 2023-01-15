@@ -1,0 +1,24 @@
+#!/bin/bash
+
+echo "Enter target domain:"
+read domain
+
+echo "Starting subdomain enumeration..."
+
+# Install Sublist3r if it's not already installed
+if [ ! -f /usr/bin/sublist3r ]; then
+    echo "Sublist3r not found. Installing..."
+    apt-get update
+    apt-get install -y sublist3r
+fi
+
+# Run Sublist3r
+sublist3r -d $domain -o subdomains.txt
+
+# Print the number of subdomains found
+subdomains=$(cat subdomains.txt | wc -l)
+echo "Found $subdomains subdomains."
+
+# Print the subdomains
+echo "Subdomains:"
+cat subdomains.txt
